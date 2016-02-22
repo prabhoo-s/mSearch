@@ -181,8 +181,10 @@
 #pragma mark - Activity Indicator
 
 - (void)startActivityIndicator {
-    self.spinner =
-        [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if (self.spinner == nil) {
+        self.spinner =
+            [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }
     CGRect frame = self.spinner.frame;
     frame.origin.x = (self.view.frame.size.width / 2 - frame.size.width / 2);
     frame.origin.y = (self.view.frame.size.height / 3 - frame.size.height / 2);
