@@ -32,12 +32,7 @@
         NSData *dataFromUrl = nil;
         dataFromUrl = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURI]];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [UIView transitionWithView:self.imageView
-                              duration:5.0f
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                strongSelf.albumCover.image = [UIImage imageWithData:dataFromUrl];
-                            } completion:nil];
+            strongSelf.albumCover.image = [UIImage imageWithData:dataFromUrl];
         });
     });
 }

@@ -34,7 +34,7 @@
     self.albumImage.layer.cornerRadius = 8;
     self.albumImage.layer.masksToBounds = true;
     self.albumImage.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.albumImage.image = [UIImage imageNamed:@"albumcover-placeholder"];
+    self.albumImage.image = [UIImage imageNamed:@"albumcover"];
     self.trackName.text = @"Track Name";
     self.artistName.text = @"Artist Name";
     self.albumName.text = @"Album Name";

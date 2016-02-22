@@ -121,7 +121,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="albumcover-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="EJF-MJ-thv">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_album_art" translatesAutoresizingMaskIntoConstraints="NO" id="EJF-MJ-thv">
                                             <rect key="frame" x="250" y="0.0" width="100" height="100"/>
                                             <animations/>
                                             <constraints>
@@ -317,6 +317,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="albumcover-placeholder" width="60" height="60"/>
+        <image name="no_album_art" width="100" height="100"/>
     </resources>
 </document>
