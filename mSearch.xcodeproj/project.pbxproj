@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		715E6CB01C7B27290089D159 /* TrackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 715E6CAF1C7B27290089D159 /* TrackCell.xib */; settings = {ASSET_TAGS = (); }; };
+		71864E741C7B8A60001D89FC /* SearchViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71864E731C7B8A60001D89FC /* SearchViewControllerTests.m */; settings = {ASSET_TAGS = (); }; };
+		71864E761C7B923C001D89FC /* TrackDetailsControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71864E751C7B923C001D89FC /* TrackDetailsControllerTests.m */; settings = {ASSET_TAGS = (); }; };
 		7195EB241C7993B9002E0976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7195EB231C7993B9002E0976 /* main.m */; };
 		7195EB271C7993B9002E0976 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7195EB261C7993B9002E0976 /* AppDelegate.m */; };
 		7195EB2D1C7993B9002E0976 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7195EB2B1C7993B9002E0976 /* Main.storyboard */; };
@@ -47,6 +49,8 @@
 /* Begin PBXFileReference section */
 		715E6CAC1C7ACCB90089D159 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = mSearch/Common.h; sourceTree = "<group>"; };
 		715E6CAF1C7B27290089D159 /* TrackCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TrackCell.xib; path = mSearch/TrackCell.xib; sourceTree = "<group>"; };
+		71864E731C7B8A60001D89FC /* SearchViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewControllerTests.m; sourceTree = "<group>"; };
+		71864E751C7B923C001D89FC /* TrackDetailsControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDetailsControllerTests.m; sourceTree = "<group>"; };
 		7195EB1F1C7993B9002E0976 /* mSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7195EB231C7993B9002E0976 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7195EB251C7993B9002E0976 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -159,6 +163,8 @@
 			children = (
 				7195EB3C1C7993B9002E0976 /* mSearchTests.m */,
 				7195EB3E1C7993B9002E0976 /* Info.plist */,
+				71864E731C7B8A60001D89FC /* SearchViewControllerTests.m */,
+				71864E751C7B923C001D89FC /* TrackDetailsControllerTests.m */,
 			);
 			path = mSearchTests;
 			sourceTree = "<group>";
@@ -364,6 +370,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71864E741C7B8A60001D89FC /* SearchViewControllerTests.m in Sources */,
+				71864E761C7B923C001D89FC /* TrackDetailsControllerTests.m in Sources */,
 				7195EB3D1C7993B9002E0976 /* mSearchTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

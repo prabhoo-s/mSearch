@@ -53,9 +53,6 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UITableViewHeaderFooterView *sectionHeaderView =
         [tableView dequeueReusableHeaderFooterViewWithIdentifier:HEADER_REASUABLE_IDENTIFIER];
-    UILabel *lblSectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 320, 42)];
-    lblSectionHeader.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
-    [sectionHeaderView.contentView addSubview:lblSectionHeader];
     [sectionHeaderView.contentView setBackgroundColor:TABLE_VIEW_SECTION_HEADER_COLOR];
     
     return sectionHeaderView;

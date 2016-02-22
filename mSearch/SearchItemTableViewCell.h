@@ -22,4 +22,6 @@
 
 + (NSString *)reuseIdentifier;
 
++ (CGFloat)heightForCell;
+
 @end

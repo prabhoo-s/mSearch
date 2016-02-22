@@ -13,9 +13,10 @@
 #import "TrackDetailsPageViewController.h"
 #import "Common.h"
 
+#define DELAY_TIME 1.5
+
 @interface SearchScreenTableViewController () <UISearchBarDelegate>
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
 @property (nonatomic, strong) NSMutableArray *searchResult;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) NSURLSessionDataTask *dataTask;
@@ -109,12 +110,8 @@
     //to ignore touch and other events
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
-    // cancel in progress data task if any
-    if (self.dataTask) {
-        [self.dataTask cancel];
-    }
-    
-    [self performSelector:@selector(callWebService:) withObject:searchText];
+    [self startActivityIndicator];
+    [self performSelector:@selector(callWebService:) withObject:searchText afterDelay:DELAY_TIME];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {   
@@ -125,14 +122,19 @@
 #pragma mark - Web Service
 
 - (void)callWebService:(NSString *)searchString {
-    [self startActivityIndicator];
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlWithQuery = [NSString stringWithFormat:TRACKS_LOOKUP_URL, searchString];
-    if (self.dataTask) {
-        [self.dataTask cancel];
-    }
-    SearchScreenTableViewController* __weak weakSelf = self;
 
+    // cancel in progress data task if any
+    if (self.dataTask && self.dataTask.state == NSURLSessionTaskStateRunning) {
+        [self.dataTask suspend];
+        [self.dataTask cancel];
+        self.dataTask = nil;
+    }
+    
+    SearchScreenTableViewController* __weak weakSelf = self;
+    
+    // NSURLSessionDataTask API
     self.dataTask =
         [session dataTaskWithURL:[NSURL URLWithString:urlWithQuery]
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

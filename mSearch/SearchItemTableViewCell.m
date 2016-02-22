@@ -8,6 +8,8 @@
 
 #import "SearchItemTableViewCell.h"
 
+#define CELL_HEIGHT 70
+
 @implementation SearchItemTableViewCell
 
 #pragma mark Initializers
@@ -135,6 +137,10 @@
             [activityIndicator removeFromSuperview];
         });
     });
+}
+
++ (CGFloat)heightForCell {
+    return CELL_HEIGHT;
 }
 
 @end
