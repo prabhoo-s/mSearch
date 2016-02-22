@@ -15,7 +15,9 @@
 
 #define DELAY_TIME 1
 
-@interface SearchScreenTableViewController () <UISearchBarDelegate> 
+@interface SearchScreenTableViewController () <UISearchBarDelegate> {
+    NSTimer *searchDelayer;
+}
 
 @property (nonatomic, strong) NSMutableArray *searchResult;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
@@ -106,18 +108,22 @@
 
 #pragma mark - UISearchBarDelegate
 
-
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    // Cancel any existing timer whenever the text changes
+    [searchDelayer invalidate], searchDelayer=nil;
+
     //user has clicked on clear X
     if (searchText.length == 0) {
         [self stopActivityIndicator];
     }
     else {
-        //to ignore touch and other events
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-
         [self startActivityIndicator];
-        [self performSelector:@selector(callWebService:) withObject:searchText afterDelay:DELAY_TIME];
+        // Create and schedule a new one
+        searchDelayer = [NSTimer scheduledTimerWithTimeInterval:1.5
+                                                         target:self
+                                                       selector:@selector(performSearch:)
+                                                       userInfo:searchText
+                                                        repeats:NO];
     }
 }
 
@@ -126,19 +132,19 @@
     [searchBar resignFirstResponder];
 }
 
+- (void)performSearch:(NSTimer *)timer {
+    assert(timer == searchDelayer);
+    [self callWebService:searchDelayer.userInfo];
+    // the timer is about to release and dealloc itself
+    searchDelayer = nil;
+}
+
 #pragma mark - Web Service
 
 - (void)callWebService:(NSString *)searchString {
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlWithQuery = [NSString stringWithFormat:TRACKS_LOOKUP_URL, searchString];
 
-    // cancel in progress data task if any
-    if (self.dataTask && self.dataTask.state == NSURLSessionTaskStateRunning) {
-        [self.dataTask suspend];
-        [self.dataTask cancel];
-        self.dataTask = nil;
-    }
-    
     SearchScreenTableViewController* __weak weakSelf = self;
     
     // NSURLSessionDataTask API
@@ -164,7 +170,6 @@
             // perform on main
             [strongSelf stopActivityIndicator];
             [strongSelf.tableView reloadData];
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         });
     }];
 
