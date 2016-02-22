@@ -11,6 +11,7 @@
 #import "Track.h"
 #import "SearchItemTableViewCell.h"
 #import "TrackDetailsPageViewController.h"
+#import "Common.h"
 
 @interface SearchScreenTableViewController () <UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
@@ -27,7 +28,7 @@
     self.searchResult = [NSMutableArray array];
     
     //view controller title
-    self.title = @"Search Lyrics";
+    self.title = @"Search Tracks";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,9 +49,10 @@
     else {
         UILabel *noDataLabel         = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
         noDataLabel.text             = @"Your search results will appear here.";
-        noDataLabel.textColor        = [UIColor blackColor];
+        noDataLabel.textColor        = [UIColor lightGrayColor];
         noDataLabel.textAlignment    = NSTextAlignmentCenter;
         self.tableView.backgroundView = noDataLabel;
+        self.tableView.backgroundView.backgroundColor = [UIColor whiteColor];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
 
@@ -128,7 +130,7 @@
 - (void)callWebService:(NSString*)searchString {
     [self startActivityIndicator];
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlWithQuery = [NSString stringWithFormat:@"https://itunes.apple.com/search?term=%@", searchString];
+    NSString *urlWithQuery = [NSString stringWithFormat:TRACKS_LOOKUP_URL, searchString];
     NSURLSessionDataTask *dataTask =
         [session dataTaskWithURL:[NSURL URLWithString:urlWithQuery]
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

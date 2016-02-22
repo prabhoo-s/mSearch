@@ -8,6 +8,7 @@
 
 #import "TrackDetailsPageViewController.h"
 
+#import "common.h"
 #import "TrackDetailsTableViewController.h"
 
 @interface TrackDetailsPageViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
@@ -21,7 +22,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Lyrics";
     [self createPageViewController];
+    [[UIPageControl appearance] setPageIndicatorTintColor: [UIColor lightTextColor]];
+    [[UIPageControl appearance] setCurrentPageIndicatorTintColor: [UIColor lightTextColor]];
+    [[UIPageControl appearance] setBackgroundColor: APP_THEME_COLOR];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -80,13 +86,12 @@
 
 #pragma mark - Page Indicator
 
-- (NSInteger) presentationCountForPageViewController: (UIPageViewController *) pageViewController
-{
-    return [self.trackItems count];
+- (NSInteger) presentationCountForPageViewController: (UIPageViewController *) pageViewController {
+    //simplly to denote pages
+    return 3;
 }
 
-- (NSInteger) presentationIndexForPageViewController: (UIPageViewController *) pageViewController
-{
+- (NSInteger) presentationIndexForPageViewController: (UIPageViewController *) pageViewController {
     return 0;
 }
 

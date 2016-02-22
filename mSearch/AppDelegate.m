@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+#import "Common.h"
+
 @interface AppDelegate ()
 
 @end
@@ -16,14 +18,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // APP Theming
-    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:113.0f/225.0f
-                                                                  green:193.0f/225.0f
-                                                                   blue:147.0f/225.0f
-                                                                  alpha:1.0f]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UISearchBar appearance] setBackgroundImage:[UIImage new]
-                                  forBarPosition:UIBarPositionAny
-                                      barMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBarTintColor:APP_THEME_COLOR];
+    [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
     return YES;
 }
 

@@ -13,9 +13,7 @@
 #import "ArtistNamesCell.h"
 #import "AlbumNameCell.h"
 #import "LyricsCell.h"
-
-#define HEADER_REASUABLE_IDENTIFIER @"HEADER_REASUABLE_IDENTIFIER"
-#define TABLE_VIEW_SECTION_HEADER_COLOR [UIColor colorWithRed:113.0f/225.0f green:193.0f/225.0f blue:147.0f/225.0f alpha:1.0f]
+#import "Common.h"
 
 @interface TrackDetailsTableViewController () <UITableViewDataSource,UITableViewDelegate>
 
@@ -27,6 +25,9 @@
     [super viewDidLoad];
     
     [self.tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:HEADER_REASUABLE_IDENTIFIER];
+    
+    //fetch lyrics
+    [self startFetchingSongLyrics:self.trackItem];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,35 +80,34 @@
     
     UITableViewCell *cell = nil;
     
-    if (indexPath.section == 0) {
-        static NSString *CellIdentifier = @"ID_ALBUM_COVER_CELL";
-        AlbumCoverCell *albumCoverCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (indexPath.section == SECTION_ALBUM_COVER_CELL) {
+        static NSString *cellIdentifier = @"ID_ALBUM_COVER_CELL";
+        AlbumCoverCell *albumCoverCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         // load the image here
         [albumCoverCell setImageWithName:self.trackItem.albumImageUrl];
         cell = albumCoverCell;
     }
-    else if (indexPath.section == 1) {
-        static NSString *CellIdentifier = @"ID_TRACK_NAME_CELL";
-        TrackNameCell *trackNameCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    else if (indexPath.section == SECTION_TRACK_NAME_CELL) {
+        static NSString *cellIdentifier = @"ID_TRACK_NAME_CELL";
+        TrackNameCell *trackNameCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         trackNameCell.trackName.text = self.trackItem.trackName;
         cell = trackNameCell;
     }
-    else if (indexPath.section == 2) {
-        static NSString *CellIdentifier = @"ID_ARTIST_CELL";
-        ArtistNamesCell *artistCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    else if (indexPath.section == SECTION_ARTIST_CELL) {
+        static NSString *cellIdentifier = @"ID_ARTIST_CELL";
+        ArtistNamesCell *artistCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         artistCell.artistName.text = self.trackItem.artistName;
         cell = artistCell;
     }
-    else if (indexPath.section == 3) {
-        static NSString *CellIdentifier = @"ID_ALBUM_CELL";
-        AlbumNameCell *albumNameCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    else if (indexPath.section == SECTION_ALBUM_CELL) {
+        static NSString *cellIdentifier = @"ID_ALBUM_CELL";
+        AlbumNameCell *albumNameCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         albumNameCell.albumName.text = self.trackItem.albumName;
         cell = albumNameCell;
     }
-    else if (indexPath.section == 4) {
-        static NSString *CellIdentifier = @"ID_LYRICS_CELL";
-        LyricsCell *lyricsCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//        lyricsCell.albumName.text = [self startFetchingLyrics];
+    else if (indexPath.section == SECTION_LYRICS_CELL) {
+        static NSString *cellIdentifier = @"ID_LYRICS_CELL";
+        LyricsCell *lyricsCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         cell = lyricsCell;
     }
 
@@ -115,5 +115,63 @@
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     return cell;
 }
+
+
+- (void)startFetchingSongLyrics:(Track *)trackItem {
+    NSString *url =
+        [NSString stringWithFormat:TRACK_DETAILS_URL, trackItem.artistName, trackItem.trackName];
+    
+    _Pragma("clang diagnostic push")
+    _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_8_3) {
+        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    }
+    else {
+        url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
+    _Pragma("clang diagnostic pop")
+
+    NSLog(@"%@", url);
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *dataTask =
+        [session dataTaskWithURL:[NSURL URLWithString:url]
+               completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+
+        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", responseString);
+        if (error) {
+            NSLog(@"JSON data error: %@", error);
+            return;
+        }
+        else {
+            NSLog(@"LYRICS:%@", responseString);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // perform on main
+            // reload the lyrics cell
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+
+        });
+    }];
+
+    [dataTask resume];
+}
+
+//Counting lines of wrapped text
+
+//- (NSInteger)linesofwrappedtext:(NSString)
+//    NSLayoutManager *layoutManager = [textView layoutManager];
+//    unsigned numberOfLines, index, numberOfGlyphs = [layoutManager numberOfGlyphs];
+//    NSRange lineRange;
+//    for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++){
+//        (void) [layoutManager lineFragmentRectForGlyphAtIndex:index
+//                effectiveRange:&lineRange];
+//        index = NSMaxRange(lineRange);
+//    }
+//    return numberOfLines;
+//}
 
 @end
