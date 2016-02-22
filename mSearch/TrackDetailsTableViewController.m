@@ -16,7 +16,8 @@
 #import "Common.h"
 
 @interface TrackDetailsTableViewController () <UITableViewDataSource,UITableViewDelegate>
-
+@property (nonatomic, copy) NSString *lyricContent;
+@property (nonatomic, assign) CGFloat textViewCellHeight;
 @end
 
 @implementation TrackDetailsTableViewController
@@ -26,12 +27,16 @@
     
     [self.tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:HEADER_REASUABLE_IDENTIFIER];
     
-    //fetch lyrics
-    [self startFetchingSongLyrics:self.trackItem];
+    //default Lyrics
+    
+    self.lyricContent = @"Fetching Lyrics...";
+    self.textViewCellHeight = 44.0f;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    //fetch lyrics
+    [self startFetchingSongLyrics:self.trackItem];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,8 +71,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     float height = 0.0f;
-    if (indexPath.section == 0) {
+    if (indexPath.section == SECTION_ALBUM_COVER_CELL) {
+        // height of album cover is 100px
         height = 100.0f;
+    }
+    else if (indexPath.section == SECTION_LYRICS_CELL) {
+        //cell height calculated dynamically
+        height = self.textViewCellHeight;
     }
     else {
         height = 44.0f;
@@ -108,6 +118,7 @@
     else if (indexPath.section == SECTION_LYRICS_CELL) {
         static NSString *cellIdentifier = @"ID_LYRICS_CELL";
         LyricsCell *lyricsCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        lyricsCell.lyrics.text = self.lyricContent;
         cell = lyricsCell;
     }
 
@@ -131,47 +142,57 @@
     }
     _Pragma("clang diagnostic pop")
 
-    NSLog(@"%@", url);
+//    NSLog(@"Lyrics URL:%@", url);
+
     NSURLSession *session = [NSURLSession sharedSession];
+    TrackDetailsTableViewController* __weak weakSelf = self;
     
     NSURLSessionDataTask *dataTask =
         [session dataTaskWithURL:[NSURL URLWithString:url]
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-
+        TrackDetailsTableViewController* strongSelf = weakSelf;
         NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"%@", responseString);
         if (error) {
-            NSLog(@"JSON data error: %@", error);
+            NSLog(@"text data error: %@", error);
             return;
         }
         else {
-            NSLog(@"LYRICS:%@", responseString);
+            responseString = [responseString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            //string is not whitespace
+            if ([[responseString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
+                strongSelf.lyricContent = responseString;
+            }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            // perform on main
-            // reload the lyrics cell
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            if (strongSelf) {
+                // perform on main
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:SECTION_LYRICS_CELL];
+                LyricsCell *cell = (LyricsCell *)[strongSelf.tableView cellForRowAtIndexPath:indexPath];
+                // calculate cell height
+                strongSelf.textViewCellHeight = [strongSelf textViewHeight:responseString andWidth:cell.lyrics.contentSize.width];
 
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-
+                // reload the lyrics cell
+                [strongSelf.tableView beginUpdates];
+                [strongSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [strongSelf.tableView endUpdates];
+            }
         });
     }];
 
     [dataTask resume];
 }
 
-//Counting lines of wrapped text
-
-//- (NSInteger)linesofwrappedtext:(NSString)
-//    NSLayoutManager *layoutManager = [textView layoutManager];
-//    unsigned numberOfLines, index, numberOfGlyphs = [layoutManager numberOfGlyphs];
-//    NSRange lineRange;
-//    for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++){
-//        (void) [layoutManager lineFragmentRectForGlyphAtIndex:index
-//                effectiveRange:&lineRange];
-//        index = NSMaxRange(lineRange);
-//    }
-//    return numberOfLines;
-//}
+- (CGFloat)textViewHeight:(NSString *)text andWidth:(CGFloat)width {
+    UITextView *calculationView = [[UITextView alloc] init];
+    UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    NSAttributedString *attributedText =
+        [[NSAttributedString alloc] initWithString:text
+                                        attributes:@{NSFontAttributeName: font}];
+    [calculationView setAttributedText:attributedText];
+    CGSize size = [calculationView sizeThatFits:CGSizeMake(width, FLT_MAX)];
+    
+    return size.height;
+}
 
 @end

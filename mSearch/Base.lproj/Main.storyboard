@@ -150,7 +150,7 @@
         <scene sceneID="X5K-Rd-a5r">
             <objects>
                 <tableViewController storyboardIdentifier="ID_TRACK_DETAIL_VC" hidesBottomBarWhenPushed="YES" id="doI-BR-XVO" customClass="TrackDetailsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UK9-WR-ijz">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UK9-WR-ijz">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
@@ -322,25 +322,17 @@
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu," translatesAutoresizingMaskIntoConstraints="NO" id="Z0l-nI-0Nf">
                                             <rect key="frame" x="145" y="7" width="430" height="30"/>
                                             <animations/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="30" id="jXM-I3-lOg"/>
-                                            </constraints>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                         </textView>
                                     </subviews>
                                     <animations/>
                                     <constraints>
-                                        <constraint firstItem="Z0l-nI-0Nf" firstAttribute="top" secondItem="yv0-vZ-R6P" secondAttribute="topMargin" constant="-1" id="RWX-gb-JC8"/>
-                                        <constraint firstItem="Z0l-nI-0Nf" firstAttribute="leading" secondItem="sRU-iZ-U1r" secondAttribute="trailing" constant="79" id="ahZ-6Z-mGV"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Z0l-nI-0Nf" secondAttribute="trailing" constant="17" id="kJ2-4d-8i8"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Z0l-nI-0Nf" secondAttribute="bottom" constant="-2" id="psW-nX-J10"/>
+                                        <constraint firstItem="Z0l-nI-0Nf" firstAttribute="leading" secondItem="sRU-iZ-U1r" secondAttribute="trailing" constant="79" id="Gnu-iG-l2S"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Z0l-nI-0Nf" secondAttribute="trailing" constant="17" id="HoF-WI-ur9"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Z0l-nI-0Nf" secondAttribute="bottom" constant="-1" id="YTQ-3O-G1q"/>
+                                        <constraint firstItem="Z0l-nI-0Nf" firstAttribute="top" secondItem="yv0-vZ-R6P" secondAttribute="topMargin" constant="-1" id="xRM-hv-669"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="psW-nX-J10"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <constraints>

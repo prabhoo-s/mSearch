@@ -49,13 +49,14 @@
 
     //center the activity indicator
     activityIndicator.frame = frameToCenter;
-    
+    __weak typeof(self) weakSelf = self;
+
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         NSData *dataFromUrl = nil;
         dataFromUrl = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.trackItem.albumImageUrl]];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            self.albumImage.image = [UIImage imageWithData:dataFromUrl];
+            weakSelf.albumImage.image = [UIImage imageWithData:dataFromUrl];
             [activityIndicator removeFromSuperview];
         });
     });
