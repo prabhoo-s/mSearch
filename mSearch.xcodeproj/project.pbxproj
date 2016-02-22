@@ -111,7 +111,6 @@
 		7195EB161C7993B9002E0976 = {
 			isa = PBXGroup;
 			children = (
-				715E6CAF1C7B27290089D159 /* TrackCell.xib */,
 				715E6CAC1C7ACCB90089D159 /* Common.h */,
 				71C97A101C79F5310026F79C /* ViewControllers */,
 				71C97A0F1C79F5240026F79C /* Model */,
@@ -200,6 +199,7 @@
 			children = (
 				7195EB611C79AA29002E0976 /* SearchItemTableViewCell.h */,
 				7195EB621C79AA29002E0976 /* SearchItemTableViewCell.m */,
+				715E6CAF1C7B27290089D159 /* TrackCell.xib */,
 				71C97A211C79FF220026F79C /* AlbumCoverCell.h */,
 				71C97A221C79FF220026F79C /* AlbumCoverCell.m */,
 				71C97A151C79FC7E0026F79C /* TrackNameCell.h */,
