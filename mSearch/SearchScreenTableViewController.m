@@ -171,7 +171,7 @@
         [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     CGRect frame = self.spinner.frame;
     frame.origin.x = (self.view.frame.size.width / 2 - frame.size.width / 2);
-    frame.origin.y = (self.view.frame.size.height / 2.5f - frame.size.height / 2);
+    frame.origin.y = (self.view.frame.size.height / 3 - frame.size.height / 2);
     self.spinner.frame = frame;
     [self.tableView addSubview:self.spinner];
     [self.spinner startAnimating];
