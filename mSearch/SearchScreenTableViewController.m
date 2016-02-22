@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
 @property (nonatomic, strong) NSMutableArray *searchResult;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) NSURLSessionDataTask *dataTask;
+@property (strong, nonatomic) NSURLSession *session;
 @end
 
 @implementation SearchScreenTableViewController
@@ -87,38 +89,19 @@
     }
 }
 
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  {
-        NSString *trimDot = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    //to ignore touch and other events
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
-        if ([trimDot isEqualToString:@"."]) {
-            return YES;
-        }
-
-//    if(If Interrupted){
-//        [connection cancel];
-//    }
-//    NSString *appendStr;
-//       if([text length] == 0)
-//    {
-//        NSRange rangemak = NSMakeRange(0, [searchbar.text length]-1);
-//        appendStr = [searchbar.text substringWithRange:rangemak];
-//    }
-//    else
-//    {
-//        appendStr = [NSString stringWithFormat:@"%@%@",searchbar.text,text];
-//    }
-    [self performSelector:@selector(callWebService:) withObject:@""];
-
-    return YES;
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-//    [self performSelector:@selector(callWebService:) withObject:searchBar.text];
-//    searchBar.showsCancelButton = NO;
+    // cancel in progress data task if any
+    if (self.dataTask) {
+        [self.dataTask cancel];
+    }
+    
+    [self performSelector:@selector(callWebService:) withObject:searchText];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [self stopActivityIndicator];
     [searchBar resignFirstResponder];
 }
 
@@ -127,13 +110,19 @@
     [searchBar resignFirstResponder];
 }
 
-- (void)callWebService:(NSString*)searchString {
+- (void)callWebService:(NSString *)searchString {
     [self startActivityIndicator];
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlWithQuery = [NSString stringWithFormat:TRACKS_LOOKUP_URL, searchString];
-    NSURLSessionDataTask *dataTask =
+    if (self.dataTask) {
+        [self.dataTask cancel];
+    }
+    SearchScreenTableViewController* __weak weakSelf = self;
+
+    self.dataTask =
         [session dataTaskWithURL:[NSURL URLWithString:urlWithQuery]
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        SearchScreenTableViewController* strongSelf = weakSelf;
 
         NSDictionary *tracksData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         if (error) {
@@ -143,21 +132,24 @@
         else {
 //            NSLog(@"TRACKS:%@", tracksData);
             //Flush out old results if any
-            [self.searchResult removeAllObjects];
+            [strongSelf.searchResult removeAllObjects];
             NSArray *array = [tracksData objectForKey:@"results"];
             for (NSDictionary *track in array) {
                 Track *trackItem = [[Track alloc] initWithJSONDictionary:track];
-                [self.searchResult addObject:trackItem];
+                [strongSelf.searchResult addObject:trackItem];
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             // perform on main
-            [self stopActivityIndicator];
-            [self.tableView reloadData];
+            [strongSelf stopActivityIndicator];
+            [strongSelf.tableView reloadData];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         });
     }];
 
-    [dataTask resume];
+    if (self.dataTask) {
+        [self.dataTask resume];
+    }
 }
 
 - (void)startActivityIndicator {

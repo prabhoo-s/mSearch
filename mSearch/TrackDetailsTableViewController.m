@@ -152,7 +152,7 @@
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         TrackDetailsTableViewController* strongSelf = weakSelf;
         NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", responseString);
+//        NSLog(@"%@", responseString);
         if (error) {
             NSLog(@"text data error: %@", error);
             return;
