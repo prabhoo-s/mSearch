@@ -13,9 +13,9 @@
 #import "TrackDetailsPageViewController.h"
 #import "Common.h"
 
-#define DELAY_TIME 1.5
+#define DELAY_TIME 1
 
-@interface SearchScreenTableViewController () <UISearchBarDelegate>
+@interface SearchScreenTableViewController () <UISearchBarDelegate> 
 
 @property (nonatomic, strong) NSMutableArray *searchResult;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
@@ -106,12 +106,19 @@
 
 #pragma mark - UISearchBarDelegate
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    //to ignore touch and other events
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
-    [self startActivityIndicator];
-    [self performSelector:@selector(callWebService:) withObject:searchText afterDelay:DELAY_TIME];
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    //user has clicked on clear X
+    if (searchText.length == 0) {
+        [self stopActivityIndicator];
+    }
+    else {
+        //to ignore touch and other events
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+
+        [self startActivityIndicator];
+        [self performSelector:@selector(callWebService:) withObject:searchText afterDelay:DELAY_TIME];
+    }
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {   
