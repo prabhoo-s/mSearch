@@ -154,8 +154,7 @@
         NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 //        NSLog(@"%@", responseString);
         if (error) {
-            NSLog(@"text data error: %@", error);
-            return;
+            NSLog(@"Error: %@", error);
         }
         else {
             responseString = [responseString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

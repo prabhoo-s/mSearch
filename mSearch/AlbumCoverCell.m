@@ -25,12 +25,19 @@
 }
 
 - (void)setImageWithName:(NSString *)imageURI {
+    AlbumCoverCell* __weak weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
+        AlbumCoverCell* strongSelf = weakSelf;
         NSData *dataFromUrl = nil;
         dataFromUrl = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURI]];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            self.albumCover.image = [UIImage imageWithData:dataFromUrl];
+            [UIView transitionWithView:self.imageView
+                              duration:5.0f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                strongSelf.albumCover.image = [UIImage imageWithData:dataFromUrl];
+                            } completion:nil];
         });
     });
 }

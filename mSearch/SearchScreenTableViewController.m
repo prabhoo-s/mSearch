@@ -140,11 +140,9 @@
 
         NSDictionary *tracksData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         if (error) {
-            NSLog(@"JSON data error: %@", error);
-            return;
+            NSLog(@"Error: %@", error);
         }
         else {
-//            NSLog(@"TRACKS:%@", tracksData);
             //Flush out old results if any
             [strongSelf.searchResult removeAllObjects];
             NSArray *array = [tracksData objectForKey:@"results"];
@@ -175,7 +173,7 @@
     frame.origin.x = (self.view.frame.size.width / 2 - frame.size.width / 2);
     frame.origin.y = (self.view.frame.size.height / 2.5f - frame.size.height / 2);
     self.spinner.frame = frame;
-    [self.tableView.backgroundView addSubview:self.spinner];
+    [self.tableView addSubview:self.spinner];
     [self.spinner startAnimating];
 }
 
