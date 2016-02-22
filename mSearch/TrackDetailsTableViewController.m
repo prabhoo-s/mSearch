@@ -184,6 +184,11 @@
 }
 
 - (CGFloat)textViewHeight:(NSString *)text andWidth:(CGFloat)width {
+    if (text.length < 20  ) {
+        // return default height,
+        return 44.0f;
+    }
+
     UITextView *calculationView = [[UITextView alloc] init];
     UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     NSAttributedString *attributedText =
