@@ -20,4 +20,6 @@
 
 - (void)redraw;
 
++ (NSString *)reuseIdentifier;
+
 @end

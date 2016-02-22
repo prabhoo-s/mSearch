@@ -14,11 +14,13 @@
 #import "Common.h"
 
 @interface SearchScreenTableViewController () <UISearchBarDelegate>
+
 @property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
 @property (nonatomic, strong) NSMutableArray *searchResult;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) NSURLSessionDataTask *dataTask;
 @property (strong, nonatomic) NSURLSession *session;
+
 @end
 
 @implementation SearchScreenTableViewController
@@ -39,7 +41,6 @@
 }
 
 #pragma mark - Table view data source
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     NSInteger numOfSections = 0;
@@ -66,28 +67,43 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"ID_SEARCH_RESULTS_ITEM_CELL";
     SearchItemTableViewCell *cell =
-        (SearchItemTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
- 
+        [tableView dequeueReusableCellWithIdentifier:[SearchItemTableViewCell reuseIdentifier]];
+    
+    if (!cell) {
+        [self.tableView registerNib:[UINib nibWithNibName:@"TrackCell" bundle:nil]
+             forCellReuseIdentifier:[SearchItemTableViewCell reuseIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[SearchItemTableViewCell reuseIdentifier]];
+    }
+    // setting data source
     cell.trackItem = self.searchResult[indexPath.row];
     [cell redraw];
+
     return cell;
 }
 
-#pragma mark - Navigation
+#pragma mark - UITableViewDelegate
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"SEGUE_PUSH_VIEW_TRACK"]) {
-        TrackDetailsPageViewController *tdViewController = (TrackDetailsPageViewController *)[segue destinationViewController];;
-        tdViewController.trackItems = self.searchResult;
-        NSIndexPath *path = [self.tableView indexPathForSelectedRow];
-        tdViewController.selecteTaskIndex = path.row;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView endEditing:true];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    if (storyboard) {
+        TrackDetailsPageViewController *detailsViewController =
+            (TrackDetailsPageViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ID_TRACK_PAGE_VC"];
+        if (detailsViewController) {
+            detailsViewController.trackItems = self.searchResult;
+            NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+            detailsViewController.selecteTaskIndex = path.row;
+            [self.navigationController pushViewController:detailsViewController animated:true];
+        }
     }
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.tableView endEditing:true];
+}
+
+#pragma mark - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     //to ignore touch and other events
@@ -101,14 +117,12 @@
     [self performSelector:@selector(callWebService:) withObject:searchText];
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-}
-
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {   
     [self performSelector:@selector(callWebService:) withObject:searchBar.text];
     [searchBar resignFirstResponder];
 }
+
+#pragma mark - Web Service
 
 - (void)callWebService:(NSString *)searchString {
     [self startActivityIndicator];
@@ -151,6 +165,8 @@
         [self.dataTask resume];
     }
 }
+
+#pragma mark - Activity Indicator
 
 - (void)startActivityIndicator {
     self.spinner =

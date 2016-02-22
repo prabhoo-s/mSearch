@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		715E6CB01C7B27290089D159 /* TrackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 715E6CAF1C7B27290089D159 /* TrackCell.xib */; settings = {ASSET_TAGS = (); }; };
 		7195EB241C7993B9002E0976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7195EB231C7993B9002E0976 /* main.m */; };
 		7195EB271C7993B9002E0976 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7195EB261C7993B9002E0976 /* AppDelegate.m */; };
 		7195EB2D1C7993B9002E0976 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7195EB2B1C7993B9002E0976 /* Main.storyboard */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		715E6CAC1C7ACCB90089D159 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = mSearch/Common.h; sourceTree = "<group>"; };
+		715E6CAF1C7B27290089D159 /* TrackCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TrackCell.xib; path = mSearch/TrackCell.xib; sourceTree = "<group>"; };
 		7195EB1F1C7993B9002E0976 /* mSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7195EB231C7993B9002E0976 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7195EB251C7993B9002E0976 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		7195EB161C7993B9002E0976 = {
 			isa = PBXGroup;
 			children = (
+				715E6CAF1C7B27290089D159 /* TrackCell.xib */,
 				715E6CAC1C7ACCB90089D159 /* Common.h */,
 				71C97A101C79F5310026F79C /* ViewControllers */,
 				71C97A0F1C79F5240026F79C /* Model */,
@@ -317,6 +320,7 @@
 				7195EB321C7993B9002E0976 /* LaunchScreen.storyboard in Resources */,
 				7195EB2F1C7993B9002E0976 /* Assets.xcassets in Resources */,
 				7195EB2D1C7993B9002E0976 /* Main.storyboard in Resources */,
+				715E6CB01C7B27290089D159 /* TrackCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
