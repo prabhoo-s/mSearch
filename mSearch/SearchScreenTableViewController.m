@@ -144,7 +144,16 @@
 - (void)callWebService:(NSString *)searchString {
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlWithQuery = [NSString stringWithFormat:TRACKS_LOOKUP_URL, searchString];
-
+    _Pragma("clang diagnostic push")
+    _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_8_3) {
+        urlWithQuery = [urlWithQuery stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    }
+    else {
+        urlWithQuery = [urlWithQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
+    _Pragma("clang diagnostic pop")
+    NSLog(@"urlWithQuery:%@", urlWithQuery);
     SearchScreenTableViewController* __weak weakSelf = self;
     
     // NSURLSessionDataTask API
