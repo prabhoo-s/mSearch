@@ -152,12 +152,11 @@
         [session dataTaskWithURL:[NSURL URLWithString:urlWithQuery]
                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         SearchScreenTableViewController* strongSelf = weakSelf;
-
-        NSDictionary *tracksData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         if (error) {
             NSLog(@"Error: %@", error);
         }
         else {
+            NSDictionary *tracksData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             //Flush out old results if any
             [strongSelf.searchResult removeAllObjects];
             NSArray *array = [tracksData objectForKey:@"results"];
